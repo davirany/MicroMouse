@@ -1,25 +1,26 @@
 # MicroMouse
-
-*Deu certo? Sobe! Deu errado? Desce!*
-
 -------------------------------------------------
-| Prioridade de busca|    Ação     |    Método   |
-|         1          |  Anda reto  |   Busca()   |
-|         2          |   direita   |   Busca()   |
-|         3          |    180      |   Busca()   |
--------------------------------------------------
--------------------------------------------------
-|  Prioridade Volta  |     Ação    |   Método    |
-|         4          |  desempilha |   Volta()   |
-|         5          |   direita   |   Volta()   |
-|         6          |    180      |   Volta()   |
-|         7          |  "passo4"   |   Volta()   |
+| Prioridade de busca | Ação       | Método     |
+|-------------------- |----------- |----------- |
+| 1                   | Anda reto  | Busca()    |
+| 2                   | direita    | Busca()    |
+| 3                   | 180        | Busca()    |
 -------------------------------------------------
 
+-------------------------------------------------
+| Prioridade Volta    | Ação        | Método     |
+|-------------------- | ----------- | -----------|
+| 4                   | desempilha  | Volta()    |
+| 5                   | direita     | Volta()    |
+| 6                   | 180         | Volta()    |
+| 7                   | "passo4"    | Volta()    |
+-------------------------------------------------
+
+```python
 Busca() {
     *1-Nós não conhecidos são empilhados na pilha de busca.*
     *2-Sempre vem primeiro em relação à Volta().*
-    *3-As cordenadas do novo nó serão inseridas numa tabela hash.*
+    *3-As coordenadas do novo nó serão inseridas numa tabela hash.*
 }
 
 Volta() {

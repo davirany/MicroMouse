@@ -16,7 +16,6 @@
 | 7                   | "passo4"    | Volta()    |
 -------------------------------------------------
 
-```python
 Busca() {
     *1-Nós não conhecidos são empilhados na pilha de busca.*
     *2-Sempre vem primeiro em relação à Volta().*
@@ -26,4 +25,22 @@ Busca() {
 Volta() {
     *1-À medida que desempilhamos olharemos as possibilidades de caminhos que podem ter sido ignorados.*
     *2-Mantem-se no processo de Volta() até que o Busca() volte a ser executado.*
+}
+
+Tabela Hash -> coordenadas {
+int     key = coordenada (hash)
+string  valor = nó (grafo)
+}
+
+Grafo -> caminho & próximo nó {
+    n0: {
+        N: X,
+        L: n3,
+        S: n7,
+        O: X,
+    }
+}
+
+Pilha -> volta {
+    n0 -> no1 -> no2;
 }

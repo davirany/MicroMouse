@@ -16,7 +16,7 @@ struct hash_table *create_hash_table()
     return table;
 }
 
-int hash(int key)
+int hash(unsigned long long key)
 {
     return key % TABLE_SIZE;
 }
@@ -49,7 +49,7 @@ void print_hash_table(struct hash_table *table)
         struct hash_node *node = table->table[i];
         while (node != NULL)
         {
-            printf("Chave: %d, Valor: %d\n", node->key, node->value);
+            printf("Chave: %llu, Valor: %d\n", node->key, node->value);
             node = node->next;
         }
     }

@@ -5,7 +5,7 @@
 
 struct hash_node
 {
-    int key;
+    unsigned long long key;
     int value;
     struct hash_node *next;
 };

@@ -2,23 +2,27 @@
 #include <stdlib.h>
 #include "hashTable.h"
 #include "graph.h"
+#include "stack.h"
 
 int main()
 {
 
     struct hash_table *table = create_hash_table();
-    struct Graph* graph = createGraph();
+    struct Graph *graph = createGraph();
+    struct StackNode *stack = createStackNode(0);
 
-    int coordinate[2] = {0, 0}, idNodeGraph = 0, direction = 2;
+    int coordinate[2] = {0, 0},
+        idNodeGraph = 0, direction = 2;
     printf("coordinate: x=%d, y=%d\n", coordinate[0], coordinate[1]);
 
     // Cria primeiro hash com coordinate 0,0 e primeiro nó do grafo
     uint32_t currentHash = fnv1a_hash(coordinate[0], coordinate[1]);
     insert(table, currentHash, idNodeGraph);
     print_hash_table(table);
-    
+
     // Criar primeiro nó do grafo
     addEdge(graph, 0, 0, 1);
+    push(&stack, 0);
 
     // Primeira ação pra frente
     char action = 'm';
@@ -30,7 +34,8 @@ int main()
         switch (res)
         {
         case 0:
-            if(idNodeGraph == 0){
+            if (idNodeGraph == 0)
+            {
                 addEdge(graph, 0, direction, 1);
             }
             switch (direction) // atualizar coordinate de acordo com a direção
@@ -57,9 +62,10 @@ int main()
             // printf("%s\n", find(table, currentHash) == -1 ? "nó não existe\n" : "nó existe\n");
             if (find(table, currentHash) == -1) // coordinate não existe na tabela
             {
-                printf("Criou novo nó\n");
+                printf("Criou novo no\n");
                 idNodeGraph++;
                 insert(table, currentHash, idNodeGraph);
+                push(&stack, idNodeGraph);
                 // addEdge(graph, idNodeGraph, direction, 1);
             }
             else
@@ -81,5 +87,7 @@ int main()
     printf("\n");
     printf("valor final do Grafo:\n");
     printGraph(graph, idNodeGraph);
+    printf("valor final da Pilha:\n");
+    printStack(stack);
     return 0;
 }

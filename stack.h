@@ -1,13 +1,13 @@
 #ifndef STACK_H
 #define STACK_H
 
-struct StackNode
+typedef struct
 {
     int vertex;
     struct StackNode *next;
-};
+} StackNode;
 
-struct StackNode *createStackNode(int vertex);
+StackNode *createStackNode(int vertex);
 int isEmpty(struct StackNode *root);
 void push(struct StackNode **root, int vertex);
 int pop(struct StackNode **root);

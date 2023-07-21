@@ -1,45 +1,38 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "stack.h"
 
-// Definição da estrutura do nó da pilha
-struct StackNode
+StackNode *createStackNode(int vertex)
 {
-    int vertex;
-    struct StackNode *next;
-};
-
-// Função para criar um novo nó da pilha
-struct StackNode *createStackNode(int vertex)
-{
-    struct StackNode *newNode = (struct StackNode *)malloc(sizeof(struct StackNode));
+    StackNode *newNode = (StackNode *)malloc(sizeof(StackNode));
     newNode->vertex = vertex;
     newNode->next = NULL;
     return newNode;
 }
 
 // Função para verificar se a pilha está vazia
-int isEmpty(struct StackNode *root)
+int isEmpty(StackNode *root)
 {
     return root == NULL;
 }
 
 // Função para empilhar um nó na pilha
-void push(struct StackNode **root, int vertex)
+void push(StackNode **root, int vertex)
 {
-    struct StackNode *newNode = createStackNode(vertex);
+    StackNode *newNode = createStackNode(vertex);
     newNode->next = *root;
     *root = newNode;
 }
 
 // Função para desempilhar um nó da pilha
-int pop(struct StackNode **root)
+int pop(StackNode **root)
 {
     if (isEmpty(*root))
     {
         printf("Erro: pilha vazia\n");
         return -1;
     }
-    struct StackNode *temp = *root;
+    StackNode *temp = *root;
     *root = (*root)->next;
     int vertex = temp->vertex;
     free(temp);
@@ -47,7 +40,7 @@ int pop(struct StackNode **root)
 }
 
 // Função para obter o valor do nó do topo da pilha (sem desempilhar)
-int top(struct StackNode *root)
+int top(StackNode *root)
 {
     if (isEmpty(root))
     {
@@ -60,7 +53,7 @@ int top(struct StackNode *root)
 // Função para imprimir a pilha
 void printStack(struct StackNode *root)
 {
-    struct StackNode *temp = root;
+    StackNode *temp = root;
     while (temp != NULL)
     {
         printf("%d ", temp->vertex);
@@ -70,10 +63,10 @@ void printStack(struct StackNode *root)
 }
 
 // Função para esvaziar a pilha
-void clearStack(struct StackNode **root)
+void clearStack(StackNode **root)
 {
-    struct StackNode *current = *root;
-    struct StackNode *next;
+    StackNode *current = *root;
+    StackNode *next;
     while (current != NULL)
     {
         next = current->next;

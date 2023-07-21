@@ -3,20 +3,22 @@
 
 #include <stdint.h>
 
-struct Node {
+typedef struct
+{
     int vertex;
     int value;
-    struct Node* next;
-};
+    Node *next;
+} Node;
 
-struct Graph {
+typedef struct
+{
     int numVertices;
-    struct Node** adjLists;
-};
+    Node **adjLists;
+} Graph;
 
-struct Node* createNode(int v, int val);
-void addEdge(struct Graph* graph, int src, int dest, int val);
-void printGraph(struct Graph* graph, int maxGraph);
-struct Graph* createGraph();
+Node *createNode(int v, int val);
+void addEdge(Graph *graph, int src, int dest, int val);
+void printGraph(Graph *graph, int maxGraph);
+Graph *createGraph();
 
 #endif

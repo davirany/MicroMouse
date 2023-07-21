@@ -3,23 +3,23 @@
 
 #include <stdint.h>
 
-struct hash_node
+typedef struct
 {
     unsigned long long key;
     int value;
-    struct hash_node *next;
-};
+    hash_node *next;
+} hash_node;
 
-struct hash_table
+typedef struct
 {
     int size;
-    struct hash_node **table;
-};
+    hash_node **table;
+} hash_table;
 
-struct hash_table *create_hash_table();
-void insert(struct hash_table *table, int key, int value);
-void print_hash_table(struct hash_table *table);
-int find(struct hash_table *table, int key);
+hash_table *create_hash_table();
+void insert(hash_table *table, int key, int value);
+void print_hash_table(hash_table *table);
+int find(hash_table *table, int key);
 uint32_t fnv1a_hash(int x, int y);
 
 #endif

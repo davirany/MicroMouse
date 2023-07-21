@@ -5,8 +5,9 @@
 #define GRAPH_SIZE 1000000
 
 // Função para criar um novo nó
-struct Node* createNode(int v, int val) {
-    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+Node *createNode(int v, int val)
+{
+    Node *newNode = (Node *)malloc(sizeof(Node));
     newNode->vertex = v;
     newNode->value = val;
     newNode->next = NULL;
@@ -14,20 +15,24 @@ struct Node* createNode(int v, int val) {
 }
 
 // Função para adicionar uma aresta ao grafo direcionado
-void addEdge(struct Graph* graph, int src, int dest, int val) {
+void addEdge(Graph *graph, int src, int dest, int val)
+{
     // Adiciona uma aresta do vértice src para o vértice dest com o valor val
-    struct Node* newNode = createNode(dest, val);
+    Node *newNode = createNode(dest, val);
     newNode->next = graph->adjLists[src];
     graph->adjLists[src] = newNode;
 }
 
 // Função para imprimir o grafo
-void printGraph(struct Graph* graph, int maxGraph) {
+void printGraph(Graph *graph, int maxGraph)
+{
     int i;
-    for (i = 0; i < maxGraph; i++) {
-        struct Node* temp = graph->adjLists[i];
+    for (i = 0; i < maxGraph; i++)
+    {
+        Node *temp = graph->adjLists[i];
         printf("%d: { ", i);
-        while (temp) {
+        while (temp)
+        {
             printf("%d: %d, ", temp->vertex, temp->value);
             temp = temp->next;
         }
@@ -36,13 +41,14 @@ void printGraph(struct Graph* graph, int maxGraph) {
 }
 
 // Função para criar um grafo com n vértices
-struct Graph* createGraph() {
-    struct Graph* graph = (struct Graph*)malloc(sizeof(struct Graph));
+Graph *createGraph()
+{
+    Graph *graph = (Graph *)malloc(sizeof(Graph));
     graph->numVertices = GRAPH_SIZE;
-    
+
     // Cria um array de listas de adjacências com tamanho n
-    graph->adjLists = (struct Node**)malloc(GRAPH_SIZE * sizeof(struct Node*));
-    
+    graph->adjLists = (Node **)malloc(GRAPH_SIZE * sizeof(Node *));
+
     // int i;
     // for (i = 0; i < GRAPH_SIZE; i++) {
     //     graph->adjLists[i] = NULL;
@@ -53,6 +59,6 @@ struct Graph* createGraph() {
     //     addEdge(graph, i, 2, -1);
     //     addEdge(graph, i, 3, 7);
     // }
-    
+
     return graph;
 }

@@ -1,46 +1,48 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <stdbool.h>
+#define INT_MAX 1000000
 
-// STACK -----------------------------------------------------------------------------------------------
-struct StackNode
+// STACK --------------------------------------------------------------------------------
+typedef struct StackNode
 {
     int vertex;
     struct StackNode *next;
-};
+} StackNode;
 
 // Função para criar um novo nó da pilha
-struct StackNode *createStackNode(int vertex)
+StackNode *createStackNode(int vertex)
 {
-    struct StackNode *newNode = (struct StackNode *)malloc(sizeof(struct StackNode));
+    StackNode *newNode = (StackNode *)malloc(sizeof(StackNode));
     newNode->vertex = vertex;
     newNode->next = NULL;
     return newNode;
 }
 
 // Função para verificar se a pilha está vazia
-int isEmpty(struct StackNode *root)
+int isEmpty(StackNode *root)
 {
     return root == NULL;
 }
 
 // Função para empilhar um nó na pilha
-void push(struct StackNode **root, int vertex)
+void push(StackNode **root, int vertex)
 {
-    struct StackNode *newNode = createStackNode(vertex);
+    StackNode *newNode = createStackNode(vertex);
     newNode->next = *root;
     *root = newNode;
 }
 
 // Função para desempilhar um nó da pilha
-int pop(struct StackNode **root)
+int pop(StackNode **root)
 {
     if (isEmpty(*root))
     {
         printf("Erro: pilha vazia\n");
         return -1;
     }
-    struct StackNode *temp = *root;
+    StackNode *temp = *root;
     *root = (*root)->next;
     int vertex = temp->vertex;
     free(temp);
@@ -48,7 +50,7 @@ int pop(struct StackNode **root)
 }
 
 // Função para obter o valor do nó do topo da pilha (sem desempilhar)
-int top(struct StackNode *root)
+int top(StackNode *root)
 {
     if (isEmpty(root))
     {
@@ -58,7 +60,7 @@ int top(struct StackNode *root)
     return root->vertex;
 }
 // Função para obter o valor do nó do subtopo da pilha (sem desempilhar)
-int vasco(struct StackNode *root)
+int vasco(StackNode *root)
 {
     if (isEmpty(root) || root->next == NULL)
     {
@@ -70,9 +72,9 @@ int vasco(struct StackNode *root)
 }
 
 // Função para imprimir a pilha
-void printStack(struct StackNode *root)
+void printStack(StackNode *root)
 {
-    struct StackNode *temp = root;
+    StackNode *temp = root;
     while (temp != NULL)
     {
         printf("%d ", temp->vertex);
@@ -82,10 +84,10 @@ void printStack(struct StackNode *root)
 }
 
 // Função para esvaziar a pilha
-void clearStack(struct StackNode **root)
+void clearStack(StackNode **root)
 {
-    struct StackNode *current = *root;
-    struct StackNode *next;
+    StackNode *current = *root;
+    StackNode *next;
     while (current != NULL)
     {
         next = current->next;
@@ -95,27 +97,26 @@ void clearStack(struct StackNode **root)
     *root = NULL;
 }
 
-// HASH -------------------------------------------------------------------------------------------------
-struct hash_node
+// HASH --------------------------------------------------------------------------------
+typedef struct HashNode
 {
     unsigned long long key;
     int value;
-    struct hash_node *next;
-};
+    struct HashNode *next;
+} HashNode;
 
-struct hash_table
+typedef struct HashTable
 {
     int size;
-    struct hash_node **table;
-};
-
+    struct HashNode **table;
+} HashTable;
 #define TABLE_SIZE 1000000
 
-struct hash_table *create_hash_table()
+HashTable *create_hash_table()
 {
-    struct hash_table *table = malloc(sizeof(struct hash_table));
+    HashTable *table = malloc(sizeof(HashTable));
     table->size = TABLE_SIZE;
-    table->table = malloc(sizeof(struct hash_node *) * TABLE_SIZE);
+    table->table = malloc(sizeof(HashNode *) * TABLE_SIZE);
     for (int i = 0; i < TABLE_SIZE; i++)
     {
         table->table[i] = NULL;
@@ -128,17 +129,17 @@ int hash(unsigned long long key)
     return key % TABLE_SIZE;
 }
 
-void insert(struct hash_table *table, int key, int value)
+void insert(HashTable *table, int key, int value)
 {
     int index = hash(key);
-    struct hash_node *new_node = malloc(sizeof(struct hash_node));
+    HashNode *new_node = malloc(sizeof(HashNode));
     new_node->key = key;
     new_node->value = value;
     new_node->next = table->table[index];
     table->table[index] = new_node;
 }
 
-int find(struct hash_table *table, int key)
+int find(HashTable *table, int key)
 {
     int index = hash(key);
     if (table->table[index] != NULL && table->table[index]->key == key)
@@ -148,12 +149,12 @@ int find(struct hash_table *table, int key)
     return -1;
 }
 
-void print_hash_table(struct hash_table *table)
+void print_hash_table(HashTable *table)
 {
     printf("Conteudo da tabela hash:\n");
     for (int i = 0; i < table->size; i++)
     {
-        struct hash_node *node = table->table[i];
+        HashNode *node = table->table[i];
         while (node != NULL)
         {
             printf("Chave: %llu, Valor: %d\n", node->key, node->value);
@@ -172,24 +173,26 @@ uint32_t fnv1a_hash(int x, int y)
     return hash;
 }
 
-
-// GRAPH -----------------------------------------------------------------------------------------------
-struct Node {
+// GRAPH --------------------------------------------------------------------------------
+typedef struct Node
+{
     int vertex;
     int value;
-    struct Node* next;
-};
+    struct Node *next;
+} Node;
 
-struct Graph {
+typedef struct Graph
+{
     int numVertices;
-    struct Node** adjLists;
-};
+    struct Node **adjLists;
+} Graph;
 
 #define GRAPH_SIZE 1000000
 
 // Função para criar um novo nó
-struct Node* createNode(int v, int val) {
-    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+Node *createNode(int v, int val)
+{
+    Node *newNode = (Node *)malloc(sizeof(Node));
     newNode->vertex = v;
     newNode->value = val;
     newNode->next = NULL;
@@ -197,20 +200,24 @@ struct Node* createNode(int v, int val) {
 }
 
 // Função para adicionar uma aresta ao grafo direcionado
-void addEdge(struct Graph* graph, int src, int vertex, int val) {
+void addEdge(Graph *graph, int src, int vertex, int val)
+{
     // Adiciona uma aresta do vértice src para o vértice vertex com o valor val
-    struct Node* newNode = createNode(vertex, val);
+    Node *newNode = createNode(vertex, val);
     newNode->next = graph->adjLists[src];
     graph->adjLists[src] = newNode;
 }
 
 // Função para imprimir o grafo
-void printGraph(struct Graph* graph, int maxGraph) {
+void printGraph(Graph *graph, int maxGraph)
+{
     int i;
-    for (i = 0; i <= maxGraph; i++) {
-        struct Node* temp = graph->adjLists[i];
+    for (i = 0; i <= maxGraph; i++)
+    {
+        Node *temp = graph->adjLists[i];
         printf("%d: { ", i);
-        while (temp) {
+        while (temp)
+        {
             printf("%d: %d, ", temp->vertex, temp->value);
             temp = temp->next;
         }
@@ -219,10 +226,13 @@ void printGraph(struct Graph* graph, int maxGraph) {
 }
 
 // Função para obter o valor associado a um vértice
-int getVertexValue(struct Graph* graph, int node, int vertex) {
-    struct Node* temp = graph->adjLists[node];
-    while (temp) {
-        if (temp->vertex == vertex) {
+int getVertexValue(Graph *graph, int node, int vertex)
+{
+    Node *temp = graph->adjLists[node];
+    while (temp)
+    {
+        if (temp->vertex == vertex)
+        {
             return temp->value;
         }
         temp = temp->next;
@@ -232,10 +242,13 @@ int getVertexValue(struct Graph* graph, int node, int vertex) {
 }
 
 // Função para obter o vertice associado a um node secundário
-int getVertexDirection(struct Graph* graph, int node, int secondaryNode) {
-    struct Node* temp = graph->adjLists[node];
-    while (temp) {
-        if (temp->value == secondaryNode) {
+int getVertexDirection(Graph *graph, int node, int secondaryNode)
+{
+    Node *temp = graph->adjLists[node];
+    while (temp)
+    {
+        if (temp->value == secondaryNode)
+        {
             return temp->vertex;
         }
         temp = temp->next;
@@ -246,13 +259,14 @@ int getVertexDirection(struct Graph* graph, int node, int secondaryNode) {
 }
 
 // Função para criar um grafo com n vértices
-struct Graph* createGraph() {
-    struct Graph* graph = (struct Graph*)malloc(sizeof(struct Graph));
+Graph *createGraph()
+{
+    Graph *graph = (Graph *)malloc(sizeof(Graph));
     graph->numVertices = GRAPH_SIZE;
-    
+
     // Cria um array de listas de adjacências com tamanho n
-    graph->adjLists = (struct Node**)malloc(GRAPH_SIZE * sizeof(struct Node*));
-    
+    graph->adjLists = (Node **)malloc(GRAPH_SIZE * sizeof(Node *));
+
     // int i;
     // for (i = 0; i < GRAPH_SIZE; i++) {
     //     graph->adjLists[i] = NULL;
@@ -263,42 +277,164 @@ struct Graph* createGraph() {
     //     addEdge(graph, i, 2, -1);
     //     addEdge(graph, i, 3, 7);
     // }
-    
+
     return graph;
+}
+// Dijkstra -----------------------------------------------------------------------------------------------------
+
+int find_min_distance(int distances[], bool visited[], int numVertices)
+{
+    int minDistance = INT_MAX;
+    int minIndex;
+
+    for (int v = 0; v < numVertices; v++)
+    {
+        if (!visited[v] && distances[v] <= minDistance)
+        {
+            minDistance = distances[v];
+            minIndex = v;
+        }
+    }
+
+    return minIndex;
+}
+
+void dijkstra(Graph *graph, int numVertices, int origin)
+{
+    int distances[numVertices];
+    bool visited[numVertices];
+    int predecessors[numVertices];
+
+    for (int v = 0; v < numVertices; v++)
+    {
+        distances[v] = INT_MAX;
+        visited[v] = false;
+        predecessors[v] = -1;
+    }
+
+    distances[origin] = 0;
+
+    for (int count = 0; count < numVertices - 1; count++)
+    {
+        int u = find_min_distance(distances, visited, numVertices);
+        visited[u] = true;
+
+        Node *adjList = graph->adjLists[u];
+        while (adjList != NULL)
+        {
+            int v = adjList->vertex;
+            int weight = adjList->value;
+
+            if (!visited[v] && distances[u] != INT_MAX && distances[u] + weight < distances[v])
+            {
+                distances[v] = distances[u] + weight;
+                predecessors[v] = u;
+            }
+
+            adjList = adjList->next;
+        }
+    }
+
+    printf("Vertex\t Distance from Origin\n");
+    for (int v = 0; v < numVertices; v++)
+    {
+        printf("%d \t\t %d\n", v, distances[v]);
+    }
+}
+
+void dijkstra_with_termination(Graph *graph, int numVertices, int origin, int destination)
+{
+    int distances[numVertices];
+    bool visited[numVertices];
+
+    for (int v = 0; v < numVertices; v++)
+    {
+        distances[v] = INT_MAX;
+        visited[v] = false;
+    }
+
+    distances[origin] = 0;
+
+    for (int count = 0; count < numVertices - 1; count++)
+    {
+        int u = find_min_distance(distances, visited, numVertices);
+        visited[u] = true;
+
+        if (u == destination)
+        {
+            break;
+        }
+
+        Node *adjList = graph->adjLists[u];
+        while (adjList != NULL)
+        {
+            int v = adjList->vertex;
+            int weight = adjList->value;
+
+            if (!visited[v] && distances[u] != INT_MAX && distances[u] + weight < distances[v])
+            {
+                distances[v] = distances[u] + weight;
+            }
+
+            adjList = adjList->next;
+        }
+    }
+
+    printf("Vertex\t Distance from Origin\n");
+    for (int v = 0; v < numVertices; v++)
+    {
+        printf("%d \t\t %d\n", v, distances[v]);
+    }
 }
 
 // MAIN -----------------------------------------------------------------------------------------------------
 
-int vertex180degrees(int direction){
+int vertex180degrees(int direction)
+{
     int oppositeDirection;
-    if(direction > 1){
+    if (direction > 1)
+    {
         oppositeDirection = direction - 2;
-    } else {
+    }
+    else
+    {
         oppositeDirection = direction + 2;
     }
     return oppositeDirection;
 }
 
-int rightVertex(int direction){
+int rightVertex(int direction)
+{
     int right;
-    if(direction != 3){
+    if (direction != 3)
+    {
         right = direction + 1;
-    } else {
+    }
+    else
+    {
         right = 0;
     }
     return right;
 }
 
-void changeDirection(int currentDirection, int diseredDirection){
+void changeDirection(int currentDirection, int diseredDirection)
+{
     int result = currentDirection - diseredDirection;
-    if(abs(result) == 2){
+    if (abs(result) == 2)
+    {
         printf("r\n");
         printf("r\n");
-    } else if(result == -1 || result == 3){
+    }
+    else if (result == -1 || result == 3)
+    {
         printf("r\n");
-    } else if( result == 1 || result == -3){
+    }
+    else if (result == 1 || result == -3)
+    {
         printf("l\n");
-    } else {
+    }
+    else
+    {
         return;
     }
 }
@@ -306,9 +442,9 @@ void changeDirection(int currentDirection, int diseredDirection){
 int main()
 {
 
-    struct hash_table *table = create_hash_table();
-    struct Graph *graph = createGraph();
-    struct StackNode *stack = createStackNode(0);
+    HashTable *table = create_hash_table();
+    Graph *graph = createGraph();
+    StackNode *stack = createStackNode(0);
 
     int coordinate[2] = {0, 0}, idNodeGraph = 0, currentNodeGraph = 0, secondOnStack, direction = 0, auxDirection;
     // Cria primeiro hash com coordinate 0,0 e primeiro nó do grafo
@@ -357,7 +493,6 @@ int main()
                 addEdge(graph, idNodeGraph, vertex180degrees(direction), currentNodeGraph);
                 currentNodeGraph = idNodeGraph;
                 printf("m\n");
-
             }
             else // nó já foi visitado e coordinate existe na tabela
             {
@@ -367,14 +502,15 @@ int main()
                 int qntVertexVerifyed = 1;
                 auxDirection = rightVertex(direction);
                 int nextMoveDirecton = getVertexValue(graph, currentStack, auxDirection);
-                while(nextMoveDirecton != -2 && qntVertexVerifyed <= 4) // Verifica se tem alguma aresta ainda nao visitada (-2) e evita ficar em loop
+                while (nextMoveDirecton != -2 && qntVertexVerifyed <= 4) // Verifica se tem alguma aresta ainda nao visitada (-2) e evita ficar em loop
                 {
                     auxDirection = rightVertex(auxDirection);
                     qntVertexVerifyed++;
                     nextMoveDirecton = getVertexValue(graph, currentStack, auxDirection);
                 }
-                if( qntVertexVerifyed > 4 ){// Já visitou todos os vertices
-                    //verificar a aresta que o primeiro nó da pilha se encontra
+                if (qntVertexVerifyed > 4)
+                { // Já visitou todos os vertices
+                    // verificar a aresta que o primeiro nó da pilha se encontra
                     secondOnStack = vasco(stack);
                     auxDirection = getVertexDirection(graph, currentStack, secondOnStack);
                     currentNodeGraph = secondOnStack;
@@ -392,14 +528,15 @@ int main()
             int qntVertexVerifyed = 1;
             auxDirection = rightVertex(direction);
             int nextMoveDirecton = getVertexValue(graph, currentNodeGraph, auxDirection);
-            while(nextMoveDirecton != -2 && qntVertexVerifyed < 4) // Verifica se tem alguma aresta ainda nao visitada (-2) e evita ficar em loop
+            while (nextMoveDirecton != -2 && qntVertexVerifyed < 4) // Verifica se tem alguma aresta ainda nao visitada (-2) e evita ficar em loop
             {
                 auxDirection = rightVertex(auxDirection);
                 qntVertexVerifyed++;
                 nextMoveDirecton = getVertexValue(graph, currentNodeGraph, auxDirection);
             }
-            if( qntVertexVerifyed == 4 ){// Já visitou todos os vertices
-                //verificar a aresta que o primeiro nó da pilha se encontra
+            if (qntVertexVerifyed == 4)
+            { // Já visitou todos os vertices
+                // verificar a aresta que o primeiro nó da pilha se encontra
                 secondOnStack = vasco(stack);
                 auxDirection = getVertexDirection(graph, currentNodeGraph, secondOnStack);
                 currentNodeGraph = secondOnStack;

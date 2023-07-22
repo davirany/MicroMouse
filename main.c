@@ -39,7 +39,7 @@ int pop(StackNode **root)
 {
     if (isEmpty(*root))
     {
-        printf("Erro: pilha vazia\n");
+        // printf("Erro: pilha vazia\n");
         return -1;
     }
     StackNode *temp = *root;
@@ -54,7 +54,7 @@ int top(StackNode *root)
 {
     if (isEmpty(root))
     {
-        printf("Erro: pilha vazia\n");
+        // printf("Erro: pilha vazia\n");
         return -1;
     }
     return root->vertex;
@@ -64,7 +64,7 @@ int vasco(StackNode *root)
 {
     if (isEmpty(root) || root->next == NULL)
     {
-        printf("Erro: pilha vazia ou com apenas um elemento\n");
+        // printf("Erro: pilha vazia ou com apenas um elemento\n");
         return -1;
     }
     int vice = root->next->vertex;
@@ -157,7 +157,7 @@ void print_hash_table(HashTable *table)
         HashNode *node = table->table[i];
         while (node != NULL)
         {
-            printf("Chave: %llu, Valor: %d\n", node->key, node->value);
+            // printf("Chave: %llu, Valor: %d\n", node->key, node->value);
             node = node->next;
         }
     }
@@ -254,7 +254,7 @@ int getVertexDirection(Graph *graph, int node, int secondaryNode)
         temp = temp->next;
     }
     // Retorna -1 se o nó não se conecta com o outro nó
-    printf("o nó vizinho não é o topo da pilha\n");
+    // printf("o no vizinho nao e o topo da pilha\n");
     return -1;
 }
 
@@ -267,124 +267,100 @@ Graph *createGraph()
     // Cria um array de listas de adjacências com tamanho n
     graph->adjLists = (Node **)malloc(GRAPH_SIZE * sizeof(Node *));
 
-    // int i;
-    // for (i = 0; i < GRAPH_SIZE; i++) {
-    //     graph->adjLists[i] = NULL;
-
-    //     // Adiciona as arestas 0, 1, 2, 3 em cada nó
-    //     addEdge(graph, i, 0, 1);
-    //     addEdge(graph, i, 1, 3);
-    //     addEdge(graph, i, 2, -1);
-    //     addEdge(graph, i, 3, 7);
-    // }
-
     return graph;
 }
 // Dijkstra -----------------------------------------------------------------------------------------------------
 
-int find_min_distance(int distances[], bool visited[], int numVertices)
+typedef struct List
 {
-    int minDistance = INT_MAX;
-    int minIndex;
+    int value;
+    struct List *next;
+} List;
 
-    for (int v = 0; v < numVertices; v++)
-    {
-        if (!visited[v] && distances[v] <= minDistance)
-        {
-            minDistance = distances[v];
-            minIndex = v;
-        }
-    }
-
-    return minIndex;
+List *createListNode(int val)
+{
+    List *newNode = (List *)malloc(sizeof(List));
+    newNode->value = val;
+    newNode->next = NULL;
+    return newNode;
 }
 
-void dijkstra(Graph *graph, int numVertices, int origin)
+void addToList(List **list, int val)
 {
-    int distances[numVertices];
-    bool visited[numVertices];
-    int predecessors[numVertices];
+    List *newNode = createListNode(val);
+    newNode->next = *list;
+    *list = newNode;
+}
 
-    for (int v = 0; v < numVertices; v++)
+void freeList(List *list)
+{
+    while (list != NULL)
     {
-        distances[v] = INT_MAX;
-        visited[v] = false;
-        predecessors[v] = -1;
-    }
-
-    distances[origin] = 0;
-
-    for (int count = 0; count < numVertices - 1; count++)
-    {
-        int u = find_min_distance(distances, visited, numVertices);
-        visited[u] = true;
-
-        Node *adjList = graph->adjLists[u];
-        while (adjList != NULL)
-        {
-            int v = adjList->vertex;
-            int weight = adjList->value;
-
-            if (!visited[v] && distances[u] != INT_MAX && distances[u] + weight < distances[v])
-            {
-                distances[v] = distances[u] + weight;
-                predecessors[v] = u;
-            }
-
-            adjList = adjList->next;
-        }
-    }
-
-    printf("Vertex\t Distance from Origin\n");
-    for (int v = 0; v < numVertices; v++)
-    {
-        printf("%d \t\t %d\n", v, distances[v]);
+        List *temp = list;
+        list = list->next;
+        free(temp);
     }
 }
 
-void dijkstra_with_termination(Graph *graph, int numVertices, int origin, int destination)
+List *BFS(Graph *graph, int startVertex, int targetVertex)
 {
-    int distances[numVertices];
-    bool visited[numVertices];
+    int *visited = (int *)calloc(graph->numVertices, sizeof(int));
+    int *parent = (int *)calloc(graph->numVertices, sizeof(int));
 
-    for (int v = 0; v < numVertices; v++)
+    List *result = NULL;
+    List *queue = createListNode(0);
+    visited[startVertex] = 0;
+
+    while (queue != NULL)
     {
-        distances[v] = INT_MAX;
-        visited[v] = false;
-    }
+        int currentVertex = queue->value;
+        addToList(&result, currentVertex);
 
-    distances[origin] = 0;
+        queue = queue->next;
 
-    for (int count = 0; count < numVertices - 1; count++)
-    {
-        int u = find_min_distance(distances, visited, numVertices);
-        visited[u] = true;
-
-        if (u == destination)
+        Node *temp = graph->adjLists[currentVertex];
+        while (temp != NULL)
         {
-            break;
-        }
-
-        Node *adjList = graph->adjLists[u];
-        while (adjList != NULL)
-        {
-            int v = adjList->vertex;
-            int weight = adjList->value;
-
-            if (!visited[v] && distances[u] != INT_MAX && distances[u] + weight < distances[v])
+            int adjVertex = temp->value;
+            if (!visited[adjVertex])
             {
-                distances[v] = distances[u] + weight;
+                visited[adjVertex] = 1;
+                parent[adjVertex] = currentVertex;
+                addToList(&queue, adjVertex);
             }
-
-            adjList = adjList->next;
+            temp = temp->next;
         }
     }
 
-    printf("Vertex\t Distance from Origin\n");
-    for (int v = 0; v < numVertices; v++)
+    free(visited);
+    free(parent);
+    return result;
+}
+
+void printList(List *list)
+{
+    while (list != NULL)
     {
-        printf("%d \t\t %d\n", v, distances[v]);
+        printf("%d ", list->value);
+        list = list->next;
     }
+    printf("\n");
+}
+
+void freeGraph(Graph *graph)
+{
+    for (int i = 0; i < graph->numVertices; i++)
+    {
+        Node *temp = graph->adjLists[i];
+        while (temp != NULL)
+        {
+            Node *delNode = temp;
+            temp = temp->next;
+            free(delNode);
+        }
+    }
+    free(graph->adjLists);
+    free(graph);
 }
 
 // MAIN -----------------------------------------------------------------------------------------------------
@@ -439,18 +415,37 @@ void changeDirection(int currentDirection, int diseredDirection)
     }
 }
 
+int *updateCoordinate(int direction, int coordinate[2])
+{
+    switch (direction) // atualizar coordinate de acordo com a direção
+    {
+    case 0:
+        coordinate[1]++; // north
+        break;
+    case 1:
+        coordinate[0]++; // east
+        break;
+    case 2:
+        coordinate[1]--; // south
+        break;
+    case 3:
+        coordinate[0]--; // west
+        break;
+    }
+    return coordinate;
+}
+
 int main()
 {
 
     HashTable *table = create_hash_table();
     Graph *graph = createGraph();
-    StackNode *stack = createStackNode(0);
+    StackNode *stack = createStackNode(-1);
 
     int coordinate[2] = {0, 0}, idNodeGraph = 0, currentNodeGraph = 0, secondOnStack, direction = 0, auxDirection;
     // Cria primeiro hash com coordinate 0,0 e primeiro nó do grafo
     uint32_t currentHash = fnv1a_hash(coordinate[0], coordinate[1]);
     insert(table, currentHash, idNodeGraph);
-    // print_hash_table(table);
 
     // Criar primeiro nó do grafo
     // addEdge(graph, 0, 0, 1);
@@ -460,30 +455,15 @@ int main()
     printf("m\n");
 
     int res;
-    while (scanf("%d", &res) == 1)
+    while (scanf("%d", &res) == 1 && res != 4)
     {
         switch (res)
         {
         case 0:
-            switch (direction) // atualizar coordinate de acordo com a direção
-            {
-            case 0:
-                coordinate[1]++; // north
-                break;
-            case 1:
-                coordinate[0]++; // east
-                break;
-            case 2:
-                coordinate[1]--; // south
-                break;
-            case 3:
-                coordinate[0]--; // west
-                break;
-            }
-            // printf("%d %d\n", coordinate[0], coordinate[1]);
+            updateCoordinate(direction, coordinate);
             currentHash = fnv1a_hash(coordinate[0], coordinate[1]);
-            // printf("%s\n", find(table, currentHash) == -1 ? "nó não existe\n" : "nó existe\n");
-            if (find(table, currentHash) == -1) // coordinate não existe na tabela
+            int graphHash = find(table, currentHash);
+            if (graphHash == -1) // coordinate não existe na tabela
             {
                 // printf("Criou novo no\n");
                 idNodeGraph++;
@@ -497,8 +477,16 @@ int main()
             else // nó já foi visitado e coordinate existe na tabela
             {
                 // printf("Achou um no\n");
-                pop(&stack);
-                int currentStack = top(stack);
+                int currentStack;
+                if (graphHash == vasco(stack))
+                {
+                    pop(&stack);
+                    currentStack = top(stack);
+                }
+                else
+                {
+                    currentStack = graphHash;
+                }
                 int qntVertexVerifyed = 1;
                 auxDirection = rightVertex(direction);
                 int nextMoveDirecton = getVertexValue(graph, currentStack, auxDirection);
@@ -547,17 +535,78 @@ int main()
             printf("m\n");
             break;
         case 4:
-            printf("Achou!\n");
             break;
         }
     }
-    printf("valor final da hash:\n");
-    print_hash_table(table);
-    printf("\n");
-    printf("valor final do Grafo:\n");
-    printGraph(graph, idNodeGraph);
-    printf("\n");
-    printf("valor final da Pilha:\n");
-    printStack(stack);
-    return 0;
+    // printf("Voltou!\n");
+    printf("r\n");
+    printf("r\n");
+    printf("m\n");
+    direction = vertex180degrees(direction);
+    StackNode *stackPath = createStackNode(0);
+    while (scanf("%d", &res) == 1 && vasco(stack) != -1)
+    {
+        switch (res)
+        {
+        case 0:
+            secondOnStack = vasco(stack);
+            auxDirection = getVertexDirection(graph, currentNodeGraph, secondOnStack);
+            // changeDirection(direction, auxDirection);
+            int result = direction - auxDirection;
+            // printStack(stack);
+            // printf("result: %d\n", result);
+            if (abs(result) == 2)
+            {
+                printf("r\n");
+                printf("r\n");
+            }
+            else if (result == -1 || result == 3)
+            {
+                printf("r\n");
+                push(&stackPath, (int)'l');
+            }
+            else if (result == 1 || result == -3)
+            {
+                printf("l\n");
+                push(&stackPath, (int)'r');
+            }
+            direction = auxDirection;
+            currentNodeGraph = secondOnStack;
+            pop(&stack);
+            push(&stackPath, (int)'m');
+            printf("m\n");
+            break;
+        case 1:
+            // printf("Deu erro\n");
+            break;
+        }
+    }
+    // printf("Indo again!\n");
+    printf("r\n");
+    printf("r\n");
+    printf("m\n");
+    direction = vertex180degrees(direction);
+    while (scanf("%d", &res) == 1 && res != 4)
+    {
+        switch (res)
+        {
+        case 0:
+            printf("%c\n", (char)pop(&stackPath));
+            break;
+        case 1:
+            printf("Deu erro pq cansou de andar\n");
+            break;
+        }
+        printf("valor final da hash:\n");
+        print_hash_table(table);
+        printf("\n");
+        printf("valor final do Grafo:\n");
+        printGraph(graph, idNodeGraph);
+        printf("\n");
+        printf("valor final da Pilha:\n");
+        printStack(stack);
+        printf("Valor final da Pilha de Volta:\n");
+        printStack(stackPath);
+        return 0;
+    }
 }

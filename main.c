@@ -26,6 +26,20 @@ int isEmpty(StackNode *root)
     return root == NULL;
 }
 
+// int isempty(st *s)
+// {
+//     if (s->top==-1)
+//     {
+//         printf("it's empty");
+//     }
+//     else
+//     {
+//         printf("it's not empty");
+//     }
+
+//     return s->top==-1;
+// }
+
 // Função para empilhar um nó na pilha
 void push(StackNode **root, int vertex)
 {
@@ -78,6 +92,18 @@ void printStack(StackNode *root)
     while (temp != NULL)
     {
         printf("%d ", temp->vertex);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+void printStackLetter(StackNode *root)
+{
+    StackNode *temp = root;
+    while (temp != NULL)
+    {
+        // printf("%d ", temp->vertex);
+        printf("%c", (char)temp->vertex);
         temp = temp->next;
     }
     printf("\n");
@@ -399,15 +425,19 @@ void changeDirection(int currentDirection, int diseredDirection)
     if (abs(result) == 2)
     {
         printf("r\n");
+        fflush(stdout);
         printf("r\n");
+        fflush(stdout);
     }
     else if (result == -1 || result == 3)
     {
         printf("r\n");
+        fflush(stdout);
     }
     else if (result == 1 || result == -3)
     {
         printf("l\n");
+        fflush(stdout);
     }
     else
     {
@@ -442,7 +472,7 @@ int main()
     Graph *graph = createGraph();
     StackNode *stack = createStackNode(-1);
 
-    int coordinate[2] = {0, 0}, idNodeGraph = 0, currentNodeGraph = 0, secondOnStack, direction = 0, auxDirection;
+    int coordinate[2] = {0, 0}, idNodeGraph = 0, currentNodeGraph = 0, secondOnStack, direction = 1, auxDirection;
     // Cria primeiro hash com coordinate 0,0 e primeiro nó do grafo
     uint32_t currentHash = fnv1a_hash(coordinate[0], coordinate[1]);
     insert(table, currentHash, idNodeGraph);
@@ -453,14 +483,18 @@ int main()
 
     // Primeira ação pra frente
     printf("m\n");
+    fflush(stdout);
 
     int res;
     while (scanf("%d", &res) == 1 && res != 4)
     {
+        fflush(stdin);
         switch (res)
         {
         case 0:
+            // fprintf(stderr, "entrou no 0");
             updateCoordinate(direction, coordinate);
+            printf("[%d, %d]\n", coordinate[0], coordinate[1]);
             currentHash = fnv1a_hash(coordinate[0], coordinate[1]);
             int graphHash = find(table, currentHash);
             if (graphHash == -1) // coordinate não existe na tabela
@@ -473,25 +507,35 @@ int main()
                 addEdge(graph, idNodeGraph, vertex180degrees(direction), currentNodeGraph);
                 currentNodeGraph = idNodeGraph;
                 printf("m\n");
+                fflush(stdout);
             }
             else // nó já foi visitado e coordinate existe na tabela
             {
                 // printf("Achou um no\n");
                 int currentStack;
+                // printf("%d, %d, %d\n", graphHash, vasco(stack), top(stack));
                 if (graphHash == vasco(stack))
                 {
                     pop(&stack);
                     currentStack = top(stack);
+                    auxDirection = rightVertex(direction);
                 }
                 else
-                {
+                {   
+                    // printf("entrou aqui\n");
+                    push(&stack, graphHash);
+                    int previousNode = vasco(stack);
+                    addEdge(graph, previousNode, direction, graphHash);
+                    addEdge(graph, graphHash, vertex180degrees(direction), previousNode);
                     currentStack = graphHash;
+                    currentNodeGraph = graphHash;
+                    auxDirection = direction;
                 }
                 int qntVertexVerifyed = 1;
-                auxDirection = rightVertex(direction);
                 int nextMoveDirecton = getVertexValue(graph, currentStack, auxDirection);
                 while (nextMoveDirecton != -2 && qntVertexVerifyed <= 4) // Verifica se tem alguma aresta ainda nao visitada (-2) e evita ficar em loop
-                {
+                {   
+                    // printf("tentativa %d\n", qntVertexVerifyed);
                     auxDirection = rightVertex(auxDirection);
                     qntVertexVerifyed++;
                     nextMoveDirecton = getVertexValue(graph, currentStack, auxDirection);
@@ -507,10 +551,12 @@ int main()
                 changeDirection(direction, auxDirection);
                 direction = auxDirection;
                 printf("m\n");
+                fflush(stdout);
             }
             // print_hash_table(table);
             break;
         case 1:
+            // fprintf(stderr, "entrou no 1");
             // printf("Bateu\n");
             addEdge(graph, currentNodeGraph, direction, -1);
             int qntVertexVerifyed = 1;
@@ -533,6 +579,7 @@ int main()
             changeDirection(direction, auxDirection);
             direction = auxDirection;
             printf("m\n");
+            fflush(stdout);
             break;
         case 4:
             break;
@@ -540,12 +587,16 @@ int main()
     }
     // printf("Voltou!\n");
     printf("r\n");
+    fflush(stdout);
     printf("r\n");
+    fflush(stdout);
     printf("m\n");
+    fflush(stdout);
     direction = vertex180degrees(direction);
     StackNode *stackPath = createStackNode(0);
     while (scanf("%d", &res) == 1 && vasco(stack) != -1)
     {
+        fflush(stdin);
         switch (res)
         {
         case 0:
@@ -558,23 +609,28 @@ int main()
             if (abs(result) == 2)
             {
                 printf("r\n");
+                fflush(stdout);
                 printf("r\n");
+                fflush(stdout);
             }
             else if (result == -1 || result == 3)
             {
                 printf("r\n");
+                fflush(stdout);
                 push(&stackPath, (int)'l');
             }
             else if (result == 1 || result == -3)
             {
                 printf("l\n");
+                fflush(stdout);
                 push(&stackPath, (int)'r');
             }
             direction = auxDirection;
             currentNodeGraph = secondOnStack;
             pop(&stack);
-            push(&stackPath, (int)'m');
             printf("m\n");
+            fflush(stdout);
+            push(&stackPath, (int)'m');
             break;
         case 1:
             // printf("Deu erro\n");
@@ -582,31 +638,44 @@ int main()
         }
     }
     // printf("Indo again!\n");
+    pop(&stackPath);
     printf("r\n");
+    fflush(stdout);
     printf("r\n");
+    fflush(stdout);
     printf("m\n");
+    fflush(stdout);
     direction = vertex180degrees(direction);
-    while (scanf("%d", &res) == 1 && res != 4)
+    while (scanf("%d", &res) == 1 && res != 4 && top(stackPath) != -1)
     {
-        switch (res)
-        {
-        case 0:
-            printf("%c\n", (char)pop(&stackPath));
-            break;
-        case 1:
-            printf("Deu erro pq cansou de andar\n");
+        fflush(stdin);
+        if(top(stackPath)){
+            switch (res)
+            {
+            case 0:
+                printf("%c\n", (char)pop(&stackPath));
+                fflush(stdout);
+                break;
+            case 1:
+                // printf("Deu erro pq cansou de andar\n");
+                fprintf(stderr, "entrou no 1");
+                break;
+            }
+        }
+        else{
             break;
         }
-        printf("valor final da hash:\n");
-        print_hash_table(table);
-        printf("\n");
-        printf("valor final do Grafo:\n");
-        printGraph(graph, idNodeGraph);
-        printf("\n");
-        printf("valor final da Pilha:\n");
-        printStack(stack);
-        printf("Valor final da Pilha de Volta:\n");
-        printStack(stackPath);
-        return 0;
     }
+    printf("m\n");
+    printf("valor final da hash:\n");
+    print_hash_table(table);
+    printf("\n");
+    printf("valor final do Grafo:\n");
+    printGraph(graph, idNodeGraph);
+    printf("\n");
+    printf("valor final da Pilha:\n");
+    printStack(stack);
+    printf("Valor final da Pilha de Volta:\n");
+    printStackLetter(stackPath);
+    return 0;
 }

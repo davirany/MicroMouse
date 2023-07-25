@@ -93,7 +93,7 @@ void printStackLetter(StackNode *root)
     while (temp != NULL)
     {
         // printf("%d ", temp->vertex);
-        fprintf(stderr, "%c", (char)temp->vertex);
+        printf("%c ", (char)temp->vertex);
         temp = temp->next;
     }
     printf("\n");
@@ -449,7 +449,7 @@ int main()
         case 0:
             // fprintf(stderr, "entrou no 0");
             updateCoordinate(direction, coordinate);
-            printf("[%d, %d]\n", coordinate[0], coordinate[1]);
+            // printf("[%d, %d]\n", coordinate[0], coordinate[1]);
             currentHash = fnv1a_hash(coordinate[0], coordinate[1]);
             int graphHash = find(table, currentHash);
             if (graphHash == -1) // coordinate não existe na tabela
@@ -475,8 +475,7 @@ int main()
                     currentStack = top(stack);
                     auxDirection = rightVertex(direction);
                 }
-                else
-                {   
+                else {   
                     // printf("entrou aqui\n");
                     push(&stack, graphHash);
                     int previousNode = vasco(stack);
@@ -601,17 +600,35 @@ int main()
     printf("m\n");
     fflush(stdout);
     direction = vertex180degrees(direction);
-    printStackLetter(stackPath);
-
+    // printStackLetter(stackPath);
+    int topStack;
     while (scanf("%d", &res) == 1 && res != 4 && top(stackPath) != -1)
     {
         fflush(stdin);
         // fprintf(stderr, "caracter: %c\n", (char)top(stackPath));
-        if(top(stackPath)){
+        topStack = top(stackPath);
+        // printf("topo %d %d\n",topStack, vasco(stackPath));
+        if(topStack){
             switch (res)
             {
             case 0:
-                if(top(stackPath) != (int)'m'){
+                if(topStack == 'm' && vasco(stackPath) == 'm'){
+                    printf("M\n");
+                    fflush(stdout);
+                    pop(&stackPath);
+                    pop(&stackPath);
+                    break;
+                } else {
+                    if(topStack != (int)'m'){
+                        printf("%c\n", (char)pop(&stackPath));
+                        fflush(stdout);
+                    }
+                    printf("%c\n", (char)pop(&stackPath));
+                    fflush(stdout);
+                    break;
+                }
+            case 3:
+                if(topStack != (int)'m'){
                     printf("%c\n", (char)pop(&stackPath));
                     fflush(stdout);
                 }
@@ -620,7 +637,7 @@ int main()
                 break;
             case 1:
                 // printf("Deu erro pq cansou de andar\n");
-                fprintf(stderr, "entrou no 1");
+                fprintf(stderr, "entrou no 1\n");
                 break;
             }
         }
@@ -633,14 +650,13 @@ int main()
     scanf("%d", &res);
     fflush(stdin);
 
-    fprintf(stderr, "\n começou a rodar antes de passar aqui\n");
     int qntMissing;
     printf("d\n");
     fflush(stdout);
     scanf("%d", &qntMissing);
     fflush(stdin);
     for(int i=0; i<qntMissing-1; i++){
-        fprintf(stderr, "entrou\n");
+        // fprintf(stderr, "entrou\n");
         printf("m\n");
         fflush(stdout);
         scanf("%d", &res);
@@ -648,7 +664,7 @@ int main()
     }
     printf("m\n");
     fflush(stdout);
-    fprintf(stderr, "ultimo print\n");
+    // fprintf(stderr, "ultimo print\n");
     
     
     // printf("valor final da hash:\n");

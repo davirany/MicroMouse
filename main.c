@@ -3,14 +3,12 @@
 #include <stdint.h>
 #include <stdbool.h>
 #define INT_MAX 1000000
-
 // STACK --------------------------------------------------------------------------------
 typedef struct StackNode
 {
     int vertex;
     struct StackNode *next;
 } StackNode;
-
 // Função para criar um novo nó da pilha
 StackNode *createStackNode(int vertex)
 {
@@ -19,13 +17,11 @@ StackNode *createStackNode(int vertex)
     newNode->next = NULL;
     return newNode;
 }
-
 // Função para verificar se a pilha está vazia
 int isEmpty(StackNode *root)
 {
     return root == NULL;
 }
-
 // int isempty(st *s)
 // {
 //     if (s->top==-1)
@@ -36,10 +32,8 @@ int isEmpty(StackNode *root)
 //     {
 //         printf("it's not empty");
 //     }
-
 //     return s->top==-1;
 // }
-
 // Função para empilhar um nó na pilha
 void push(StackNode **root, int vertex)
 {
@@ -47,7 +41,6 @@ void push(StackNode **root, int vertex)
     newNode->next = *root;
     *root = newNode;
 }
-
 // Função para desempilhar um nó da pilha
 int pop(StackNode **root)
 {
@@ -62,7 +55,6 @@ int pop(StackNode **root)
     free(temp);
     return vertex;
 }
-
 // Função para obter o valor do nó do topo da pilha (sem desempilhar)
 int top(StackNode *root)
 {
@@ -84,7 +76,6 @@ int vasco(StackNode *root)
     int vice = root->next->vertex;
     return vice;
 }
-
 // Função para imprimir a pilha
 void printStack(StackNode *root)
 {
@@ -96,19 +87,17 @@ void printStack(StackNode *root)
     }
     printf("\n");
 }
-
 void printStackLetter(StackNode *root)
 {
     StackNode *temp = root;
     while (temp != NULL)
     {
         // printf("%d ", temp->vertex);
-        printf("%c", (char)temp->vertex);
+        fprintf(stderr, "%c", (char)temp->vertex);
         temp = temp->next;
     }
     printf("\n");
 }
-
 // Função para esvaziar a pilha
 void clearStack(StackNode **root)
 {
@@ -122,7 +111,6 @@ void clearStack(StackNode **root)
     }
     *root = NULL;
 }
-
 // HASH --------------------------------------------------------------------------------
 typedef struct HashNode
 {
@@ -130,14 +118,12 @@ typedef struct HashNode
     int value;
     struct HashNode *next;
 } HashNode;
-
 typedef struct HashTable
 {
     int size;
     struct HashNode **table;
 } HashTable;
 #define TABLE_SIZE 1000000
-
 HashTable *create_hash_table()
 {
     HashTable *table = malloc(sizeof(HashTable));
@@ -149,12 +135,10 @@ HashTable *create_hash_table()
     }
     return table;
 }
-
 int hash(unsigned long long key)
 {
     return key % TABLE_SIZE;
 }
-
 void insert(HashTable *table, int key, int value)
 {
     int index = hash(key);
@@ -164,7 +148,6 @@ void insert(HashTable *table, int key, int value)
     new_node->next = table->table[index];
     table->table[index] = new_node;
 }
-
 int find(HashTable *table, int key)
 {
     int index = hash(key);
@@ -174,7 +157,6 @@ int find(HashTable *table, int key)
     }
     return -1;
 }
-
 void print_hash_table(HashTable *table)
 {
     printf("Conteudo da tabela hash:\n");
@@ -188,17 +170,14 @@ void print_hash_table(HashTable *table)
         }
     }
 }
-
 uint32_t fnv1a_hash(int x, int y)
 {
-    uint32_t hash = 2166136261;
-    hash ^= x;
-    hash *= 16777619;
-    hash ^= y;
-    hash *= 16777619;
+    uint64_t hashX = (uint64_t)(x + 20);  // Ajusta o intervalo de x para 0-40
+    uint64_t hashY = (uint64_t)(y + 20);  // Ajusta o intervalo de y para 0-40
+    // Combina as coordenadas usando um algoritmo de mixing simples (exemplo: multiplicação e XOR)
+    uint64_t hash = hashX * 41 + hashY;
     return hash;
 }
-
 // GRAPH --------------------------------------------------------------------------------
 typedef struct Node
 {
@@ -206,15 +185,12 @@ typedef struct Node
     int value;
     struct Node *next;
 } Node;
-
 typedef struct Graph
 {
     int numVertices;
     struct Node **adjLists;
 } Graph;
-
 #define GRAPH_SIZE 1000000
-
 // Função para criar um novo nó
 Node *createNode(int v, int val)
 {
@@ -224,7 +200,6 @@ Node *createNode(int v, int val)
     newNode->next = NULL;
     return newNode;
 }
-
 // Função para adicionar uma aresta ao grafo direcionado
 void addEdge(Graph *graph, int src, int vertex, int val)
 {
@@ -233,7 +208,6 @@ void addEdge(Graph *graph, int src, int vertex, int val)
     newNode->next = graph->adjLists[src];
     graph->adjLists[src] = newNode;
 }
-
 // Função para imprimir o grafo
 void printGraph(Graph *graph, int maxGraph)
 {
@@ -250,7 +224,6 @@ void printGraph(Graph *graph, int maxGraph)
         printf("}\n");
     }
 }
-
 // Função para obter o valor associado a um vértice
 int getVertexValue(Graph *graph, int node, int vertex)
 {
@@ -266,7 +239,6 @@ int getVertexValue(Graph *graph, int node, int vertex)
     // Retorna -2 se o vértice não for encontrado no nó especificado
     return -2;
 }
-
 // Função para obter o vertice associado a um node secundário
 int getVertexDirection(Graph *graph, int node, int secondaryNode)
 {
@@ -283,26 +255,21 @@ int getVertexDirection(Graph *graph, int node, int secondaryNode)
     // printf("o no vizinho nao e o topo da pilha\n");
     return -1;
 }
-
 // Função para criar um grafo com n vértices
 Graph *createGraph()
 {
     Graph *graph = (Graph *)malloc(sizeof(Graph));
     graph->numVertices = GRAPH_SIZE;
-
     // Cria um array de listas de adjacências com tamanho n
     graph->adjLists = (Node **)malloc(GRAPH_SIZE * sizeof(Node *));
-
     return graph;
 }
 // Dijkstra -----------------------------------------------------------------------------------------------------
-
 typedef struct List
 {
     int value;
     struct List *next;
 } List;
-
 List *createListNode(int val)
 {
     List *newNode = (List *)malloc(sizeof(List));
@@ -310,14 +277,12 @@ List *createListNode(int val)
     newNode->next = NULL;
     return newNode;
 }
-
 void addToList(List **list, int val)
 {
     List *newNode = createListNode(val);
     newNode->next = *list;
     *list = newNode;
 }
-
 void freeList(List *list)
 {
     while (list != NULL)
@@ -327,23 +292,18 @@ void freeList(List *list)
         free(temp);
     }
 }
-
 List *BFS(Graph *graph, int startVertex, int targetVertex)
 {
     int *visited = (int *)calloc(graph->numVertices, sizeof(int));
     int *parent = (int *)calloc(graph->numVertices, sizeof(int));
-
     List *result = NULL;
     List *queue = createListNode(0);
     visited[startVertex] = 0;
-
     while (queue != NULL)
     {
         int currentVertex = queue->value;
         addToList(&result, currentVertex);
-
         queue = queue->next;
-
         Node *temp = graph->adjLists[currentVertex];
         while (temp != NULL)
         {
@@ -357,12 +317,10 @@ List *BFS(Graph *graph, int startVertex, int targetVertex)
             temp = temp->next;
         }
     }
-
     free(visited);
     free(parent);
     return result;
 }
-
 void printList(List *list)
 {
     while (list != NULL)
@@ -372,7 +330,6 @@ void printList(List *list)
     }
     printf("\n");
 }
-
 void freeGraph(Graph *graph)
 {
     for (int i = 0; i < graph->numVertices; i++)
@@ -388,9 +345,7 @@ void freeGraph(Graph *graph)
     free(graph->adjLists);
     free(graph);
 }
-
 // MAIN -----------------------------------------------------------------------------------------------------
-
 int vertex180degrees(int direction)
 {
     int oppositeDirection;
@@ -404,7 +359,6 @@ int vertex180degrees(int direction)
     }
     return oppositeDirection;
 }
-
 int rightVertex(int direction)
 {
     int right;
@@ -418,7 +372,6 @@ int rightVertex(int direction)
     }
     return right;
 }
-
 void changeDirection(int currentDirection, int diseredDirection)
 {
     int result = currentDirection - diseredDirection;
@@ -444,7 +397,6 @@ void changeDirection(int currentDirection, int diseredDirection)
         return;
     }
 }
-
 int *updateCoordinate(int direction, int coordinate[2])
 {
     switch (direction) // atualizar coordinate de acordo com a direção
@@ -465,26 +417,29 @@ int *updateCoordinate(int direction, int coordinate[2])
     return coordinate;
 }
 
+int printMove(char c) {
+    printf("%c\n", c);
+    fflush(stdout);
+    int res;
+    scanf("%d", &res);
+    return res;
+}
+
 int main()
 {
-
     HashTable *table = create_hash_table();
     Graph *graph = createGraph();
     StackNode *stack = createStackNode(-1);
-
-    int coordinate[2] = {0, 0}, idNodeGraph = 0, currentNodeGraph = 0, secondOnStack, direction = 1, auxDirection;
+    int coordinate[2] = {0, 0}, idNodeGraph = 0, currentNodeGraph = 0, secondOnStack, direction = 0, auxDirection;
     // Cria primeiro hash com coordinate 0,0 e primeiro nó do grafo
     uint32_t currentHash = fnv1a_hash(coordinate[0], coordinate[1]);
     insert(table, currentHash, idNodeGraph);
-
     // Criar primeiro nó do grafo
     // addEdge(graph, 0, 0, 1);
     push(&stack, 0);
-
     // Primeira ação pra frente
     printf("m\n");
     fflush(stdout);
-
     int res;
     while (scanf("%d", &res) == 1 && res != 4)
     {
@@ -646,13 +601,20 @@ int main()
     printf("m\n");
     fflush(stdout);
     direction = vertex180degrees(direction);
+    printStackLetter(stackPath);
+
     while (scanf("%d", &res) == 1 && res != 4 && top(stackPath) != -1)
     {
         fflush(stdin);
+        // fprintf(stderr, "caracter: %c\n", (char)top(stackPath));
         if(top(stackPath)){
             switch (res)
             {
             case 0:
+                if(top(stackPath) != (int)'m'){
+                    printf("%c\n", (char)pop(&stackPath));
+                    fflush(stdout);
+                }
                 printf("%c\n", (char)pop(&stackPath));
                 fflush(stdout);
                 break;
@@ -667,15 +629,37 @@ int main()
         }
     }
     printf("m\n");
-    printf("valor final da hash:\n");
-    print_hash_table(table);
-    printf("\n");
-    printf("valor final do Grafo:\n");
-    printGraph(graph, idNodeGraph);
-    printf("\n");
-    printf("valor final da Pilha:\n");
-    printStack(stack);
-    printf("Valor final da Pilha de Volta:\n");
-    printStackLetter(stackPath);
+    fflush(stdout);
+    scanf("%d", &res);
+    fflush(stdin);
+
+    fprintf(stderr, "\n começou a rodar antes de passar aqui\n");
+    int qntMissing;
+    printf("d\n");
+    fflush(stdout);
+    scanf("%d", &qntMissing);
+    fflush(stdin);
+    for(int i=0; i<qntMissing-1; i++){
+        fprintf(stderr, "entrou\n");
+        printf("m\n");
+        fflush(stdout);
+        scanf("%d", &res);
+        fflush(stdin);
+    }
+    printf("m\n");
+    fflush(stdout);
+    fprintf(stderr, "ultimo print\n");
+    
+    
+    // printf("valor final da hash:\n");
+    // print_hash_table(table);
+    // printf("\n");
+    // printf("valor final do Grafo:\n");
+    // printGraph(graph, idNodeGraph);
+    // printf("\n");
+    // printf("valor final da Pilha:\n");
+    // printStack(stack);
+    // printf("Valor final da Pilha de Volta:\n");
+    // printStackLetter(stackPath);
     return 0;
 }

@@ -1,294 +1,61 @@
-# MicroMouse
--------------------------------------------------
-| Prioridade de busca | Ação       | Método     |
-|-------------------- |----------- |----------- |
-| 1                   | Anda reto  | Busca()    |
-| 2                   | direita    | Busca()    |
-| 3                   | 180        | Busca()    |
--------------------------------------------------
+## **🧀 Micromouse - O Labirinto Cibernético 🤖🧠**
 
--------------------------------------------------
-| Prioridade Volta    | Ação        | Método     |
-|-------------------- | ----------- | -----------|
-| 4                   | desempilha  | Volta()    |
-| 5                   | direita     | Volta()    |
-| 6                   | 180         | Volta()    |
-| 7                   | "passo4"    | Volta()    |
--------------------------------------------------
+Bem-vindo ao incrível mundo de **Micromouse** - onde robôs audaciosos se aventuram em labirintos misteriosos em busca de queijo! 🧀
 
-Busca() {
-    *1-Nós não conhecidos são empilhados na pilha de busca.*
-    *2-Sempre vem primeiro em relação à Volta().*
-    *3-As coordenadas do novo nó serão inseridas numa tabela hash.*
-}
+Você já imaginou o que acontece quando robôs ficam entediados? Eles não assistem Netflix, eles não tiram selfies... eles competem em emocionantes corridas de labirinto! Este é o lugar onde nossos pequenos amigos de metal mostram suas habilidades de navegação e resolução de problemas, tudo isso em busca do sagrado queijo virtual.
 
-Volta() {
-    *1-À medida que desempilhamos olharemos as possibilidades de caminhos que podem ter sido ignorados.*
-    *2-Mantem-se no processo de Volta() até que o Busca() volte a ser executado.*
-}
+## 💡 O Desafio
 
-Tabela Hash -> coordenadas {
-int     key = coordenada (hash)
-string  valor = nó (grafo)
-}
+O desafio é simples: levar o seu confiável robô do ponto A ao ponto B... e depois de volta a A... e quem sabe, fazer uma rápida viagem de ida e volta até o ponto B novamente. Tudo isso enquanto desvia de paredes, encontrando paredes invisíveis e espreitando o queijo hipotético. Quanto mais rápido o robozinho resolver o labirinto, mais pontos ganha. Mas lembre-se, cada colisão e ativação de sensor custam a ele umas boas unidades de tempo. É como se a vida do robô dependesse de sua velocidade, agilidade e... talvez de um pouco de queijo!
 
-Grafo -> caminho & próximo nó {
-    n0: {
-        N: X,
-        L: n3,
-        S: n7,
-        O: X,
-    }
-}
+## 🤖 Ação!
 
-Pilha -> volta {
-    n0 -> no1 -> no2;
-}
+Este não é apenas um projeto de programação, é uma jornada cibernética cheia de reviravoltas. Seu robô dominará as artes da rotação elegante (l ou r), a valente marcha à frente (m), o turbulento corrida à frente (M), a sábia ativação de sensores de paredes (s) e a contemplação filosófica da distância até o queijo (d). Cada ação é um passo em direção à glória robótica!
+
+## 🏆 Pontuação e Glória
+
+No final dessa épica aventura labiríntica, a pontuação será calculada! Cada movimento certeiro, cada esquiva habilidosa e até mesmo cada olhada atenta no sensor contarão para a vitória final. E, quem sabe, o robô que retornar com a velocidade da luz, sem um arranhão e com o cheiro mais forte de queijo, será coroado como o **Micromouse Supremo**!
+
+Então, junte-se a nós nessa jornada de bits e bytes pelo labirinto cibernético. Que a sorte esteja ao lado do seu robô, que o queijo seja abundante e que as paredes sejam apenas uma ilusão passageira. Lembre-se, é você, seu robô e uma missão: tornar-se o mestre do micromundo do Micromouse! 🚀
+
+---
+
+## 🚀 Executando o Projeto
+
+Siga esses passos simples para colocar o seu robô no caminho do labirinto:
+
+1. **Clone o Repositório:**<br>
+`git clone https://github.com/davirany/MicroMouse.git`<br>
+`cd MicroMouse`
 
 
-1
-criar hash
-criar node do grafo
-anda
-
-2 - 3
-verifica que andou e nao ta voltando
-empilha node
-zera rotacoes
-atualiza coordenada
-cria nova hash
-atualiza node anterior
-cria no do grafo
-anda
-
-4
-verifica q nao andou e nao ta voltando
-atualiza aresta do node da coordenada
-verifica se rotacionou uma, duas ou nenhuma vez (0)
-rotaciona para direita
-atualiza direcao
-anda
-
-5 - 7
-verifica que andou e nao ta voltando
-empilha node
-zera rotacoes
-atualiza coordenada
-cria nova hash
-atualiza node anterior
-cria node do grafo
-anda
-
-8
-verifica q nao andou
-atualiza aresta do node da coordenada
-verifica se rotacionou uma, duas ou nenhuma vez (0)
-rotaciona para direita
-atualiza direcao
-anda
-
-9
-verifica q nao andou
-atualiza aresta do node da coordenada
-verifica se rotacionou uma, duas ou nenhuma vez (1)
-rotaciona 180 graus
-atualiza direcao
-anda
-
-10
-verifica q nao andou
-atualiza aresta do node da coordenada
-verifica se rotacionou uma, duas ou nenhuma vez (2)
-define varivel que ta voltando
-rotaciona para esquerda
-zera rotacao
-atualiza direcao
-anda
-
-11
-verifica que andou e ta voltando
-define que nao ta mais voltando
-desempilha node
-acessa primeiro node da pilha
-consulta arestas do node
-verifica aresta da direita em relação a direcao que ele ta indo(vazia)
-rotaciona para direita
-atualiza direcao
-anda
-
-12
-verifica q nao andou
-atualiza aresta do node da coordenada
-verifica se rotacionou uma, duas ou nenhuma vez (1)
-rotaciona 180 graus
-atualiza direcao
-anda
-
-13
-verifica que andou e nao ta voltando
-empilha node
-zera rotacoes
-atualiza coordenada
-cria nova hash
-atualiza node anterior
-cria node do grafo
-anda
-
-14
-verifica q nao andou
-atualiza aresta do node da coordenada
-verifica se rotacionou uma, duas ou nenhuma vez (0)
-rotaciona para direita
-atualiza direcao
-anda
+2. **Compilando o Projeto:**
+Certifique-se de ter um compilador C instalado (por exemplo, GCC). Compile o código do robô com o seguinte comando: <br>
+`gcc main.c -o micromouse`
 
 
-15
-verifica que andou e nao ta voltando
-empilha node
-zera rotacoes
-atualiza coordenada
-cria nova hash
-atualiza node anterior
-cria node do grafo
-anda
+3. **Executando o Robô:**
+Agora é a hora da verdade! Execute o robô com:
+`./micromouse`
 
-16
-verifica q nao andou
-atualiza aresta do node da coordenada
-verifica se rotacionou uma, duas ou nenhuma vez (0)
-rotaciona para direita
-atualiza direcao
-anda
 
-17
-verifica q nao andou
-atualiza aresta do node da coordenada
-verifica se rotacionou uma, duas ou nenhuma vez (1)
-rotaciona 180 graus
-atualiza direcao
-anda
+4. **Navegue pelo Labirinto:**
+Siga as instruções impressas no console para girar, se mover, correr e usar os sensores. Leia atentamente os retornos da ação e tome decisões inteligentes para alcançar a vitória.
 
-18
-verifica q nao andou
-atualiza aresta do node da coordenada
-verifica se rotacionou uma, duas ou nenhuma vez (2)
-define varivel que ta voltando
-rotaciona para esquerda
-zera rotacao
-atualiza direcao
-anda
+## 📥 Download
 
-19
-verifica que andou e ta voltando
-define que nao ta mais voltando
-desempilha node
-acessa primeiro node da pilha
-consulta arestas do node
-verifica aresta da direita em relação a direcao que ele ta indo(preenchida)
-verifica aresta da esquerda em relação a direcao que ele ta indo(preenchida)
-verifica aresta a frente em relação a direcao que ele ta indo(vazia)
-anda
+Se você deseja apenas se maravilhar com o código ou experimentá-lo em primeira mão, pode fazer o download do projeto diretamente:
 
-20
-verifica que andou e nao ta voltando
-empilha node
-zera rotacoes
-atualiza coordenada
-cria nova hash
-atualiza node anterior
-cria node do grafo
-anda
+- [Baixar o Projeto ZIP](https://github.com/davirany/MicroMouse/archive/refs/heads/main.zip)
+- [Baixar via Git](https://github.com/davirany/MicroMouse.git)
 
-21
-verifica q nao andou
-atualiza aresta do node da coordenada
-verifica se rotacionou uma, duas ou nenhuma vez (0)
-rotaciona para direita
-atualiza direcao
-anda
+Após o download, siga as etapas de execução mencionadas acima e prepare-se para um emocionante encontro com o labirinto!
 
-22
-verifica q nao andou
-atualiza aresta do node da coordenada
-verifica se rotacionou uma, duas ou nenhuma vez (1)
-rotaciona 180 graus
-atualiza direcao
-anda
+---
 
-23
-verifica q nao andou
-atualiza aresta do node da coordenada
-verifica se rotacionou uma, duas ou nenhuma vez (2)
-define varivel que ta voltando
-rotaciona para esquerda
-zera rotacao
-atualiza direcao
-anda
+*Nota: Este projeto é puramente fictício e não contém robôs reais ou queijos prejudicados. Apenas uma brincadeira criativa para animar o mundo da programação!*
 
-24
-verifica que andou e ta voltando
-define que nao ta mais voltando
-desempilha node
-acessa primeiro node da pilha
-consulta arestas do node
-verifica aresta da direita em relação a direcao que ele ta indo(preenchida)
-verifica aresta da esquerda em relação a direcao que ele ta indo(preenchida)
-verifica aresta a frente em relação a direcao que ele ta indo(preenchida)
-define varivel que ta voltando
-desempilha node
-acessa primeiro node da pilha
-verifica qual aresta do node atual corresponde ao primeiro node da pilha
-rotaciona a direita até a direcao do node da pilha coincidir
-zera rotacao
-atualiza direcao
-empilha node atual
-anda
+*Nota 2: Certifique-se de que possui um ambiente de desenvolvimento C configurado e pronto para a ação antes de começar a diversão robótica.*
 
-25
-verifica que andou e ta voltando
-define que nao ta mais voltando
-desempilha node
-acessa primeiro node da pilha
-consulta arestas do node
-verifica aresta da direita em relação a direcao que ele ta indo(preenchida)
-verifica aresta da esquerda em relação a direcao que ele ta indo(preenchida)
-verifica aresta a frente em relação a direcao que ele ta indo(preenchida)
-define varivel que ta voltando
-desempilha node
-acessa primeiro node da pilha
-verifica qual aresta do node atual corresponde ao primeiro node da pilha
-rotaciona a direita até a direcao do node da pilha coincidir
-zera rotacao
-atualiza direcao
-empilha node atual
-anda
 
-26
-verifica que andou e ta voltando
-define que nao ta mais voltando
-desempilha node
-acessa primeiro node da pilha
-consulta arestas do node
-verifica aresta da direita em relação a direcao que ele ta indo(vazia)
-rotaciona para direita
-atualiza direcao
-anda
-
-27
-verifica q nao andou
-atualiza aresta do node da coordenada
-verifica se rotacionou uma, duas ou nenhuma vez (1)
-rotaciona 180 graus
-atualiza direcao
-anda
-
-28 X
-verifica q nao andou
-atualiza aresta do node da coordenada
-verifica se rotacionou uma, duas ou nenhuma vez (2)
-define varivel que ta voltando
-rotaciona para esquerda
-zera rotacao
-atualiza direcao
-anda
+*Nota 3: Este projeto foi desenvolvido ao longo da disciplina de Estrutura de Dados 2, ministrada pelo professor Bruno Cesar Ribas na Universidade de Brasília.*
